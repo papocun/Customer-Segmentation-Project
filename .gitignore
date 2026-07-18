@@ -226,3 +226,4 @@ artifacts/
 logs/
 .env
 venv/
+.vscode/
