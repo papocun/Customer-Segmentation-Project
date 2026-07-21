@@ -4,9 +4,12 @@ import sys
 import certifi
 import pymongo
 
+from dotenv import load_dotenv
 from src.constant.database import DATABASE_NAME
 from src.constant.env_variable import MONGODB_URL_KEY
 from src.exception import CustomerException
+
+load_dotenv()
 
 ca = certifi.where()
 
