@@ -1,0 +1,40 @@
+columns:
+  Education: object
+  Marital_Status: object
+  Income: float64
+  Dt_Customer: object
+  Recency: int64
+  Wines: int64
+  Fruits: int64
+  Meat: int64
+  Fish: int64
+  Sweets: int64
+  Gold: int64
+  Deal_Purchases: int64
+  Web_Purchases: int64
+  Catalog_Purchases: int64
+  Store_Purchases: int64
+  NumWebVisitsMonth: int64
+  AcceptedCmp3: int64
+  AcceptedCmp4: int64
+  AcceptedCmp5: int64
+  AcceptedCmp1: int64
+  AcceptedCmp2: int64
+  Complain: int64
+  Response: int64
+  Age: int64
+  Children: int64
+  Has_Partner: int64
+  Family_Size: int64
+  Is_Parent: int64
+  Total_Spending: float64
+  Spend_Ratio: float64
+  Total_Promo_Accepted: int64
+  Any_Promo_Accepted: int64
+  Total_Purchases: int64
+  Days_as_Customer: int64
+  Year_Joined: int64
+  Age_Group: object
+  Income_Group: object
+
+drop_columns: []
