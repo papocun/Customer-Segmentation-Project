@@ -17,10 +17,9 @@ from src.utils.main_utils import MainUtils
 class DataIngestion:
 
     def __init__(
-            self,
-            data_ingestion_config: DataIngestionConfig = DataIngestionConfig()
+        self,
+        data_ingestion_config: DataIngestionConfig = DataIngestionConfig()
     ):
-
         self.data_ingestion_config = data_ingestion_config
         self.utils = MainUtils()
 
@@ -28,9 +27,7 @@ class DataIngestion:
         """
         Read data from MongoDB and save a copy into Feature Store.
         """
-
         try:
-
             logging.info("Starting data export from MongoDB")
 
             customer_data = CustomerData()
@@ -39,7 +36,7 @@ class DataIngestion:
                 collection_name=COLLECTION_NAME
             )
 
-            logging.info(f"Dataframe Shape : {dataframe.shape}")
+            logging.info(f"Dataframe Shape: {dataframe.shape}")
 
             feature_store_path = self.data_ingestion_config.feature_store_file_path
 
@@ -55,7 +52,7 @@ class DataIngestion:
             )
 
             logging.info(
-                f"Feature Store Created at {feature_store_path}"
+                f"Feature Store created at {feature_store_path}"
             )
 
             return dataframe
@@ -64,12 +61,11 @@ class DataIngestion:
             raise CustomerException(e, sys)
 
     def split_data_as_train_test(
-            self,
-            dataframe: DataFrame
+        self,
+        dataframe: DataFrame
     ) -> Tuple[DataFrame, DataFrame]:
 
         try:
-
             logging.info("Performing Train-Test Split")
 
             train_df, test_df = train_test_split(
@@ -104,14 +100,11 @@ class DataIngestion:
         except Exception as e:
             raise CustomerException(e, sys)
 
-    def initiate_data_ingestion(
-            self
-    ) -> DataIngestionArtifact:
+    def initiate_data_ingestion(self) -> DataIngestionArtifact:
 
         logging.info("Entered Data Ingestion Component")
 
         try:
-
             dataframe = self.export_data_into_feature_store()
 
             schema = self.utils.read_schema_config_file()
@@ -130,12 +123,33 @@ class DataIngestion:
             )
 
             logging.info(
-                f"Data Ingestion Artifact : {data_ingestion_artifact}"
+                f"Data Ingestion Artifact: {data_ingestion_artifact}"
             )
 
-            logging.info("Data Ingestion Completed Successfully")
+            logging.info("Data Ingestion completed successfully")
 
             return data_ingestion_artifact
 
         except Exception as e:
             raise CustomerException(e, sys)
+
+
+# ======================================================
+# Run Data Ingestion
+# ======================================================
+
+if __name__ == "__main__":
+    try:
+        print("=" * 50)
+        print("Starting Data Ingestion Pipeline...")
+        print("=" * 50)
+
+        data_ingestion = DataIngestion()
+        artifact = data_ingestion.initiate_data_ingestion()
+
+        print("\n✅ Data Ingestion Completed Successfully!")
+        print(artifact)
+
+    except Exception as e:
+        print("\n❌ Data Ingestion Failed!")
+        print(e)
