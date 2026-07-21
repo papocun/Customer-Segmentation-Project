@@ -11,4 +11,5 @@ statsmodels
 openpyxl
 certifi
 pymongo
+PyYAML
 #-e .
