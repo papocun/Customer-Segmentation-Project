@@ -45,9 +45,9 @@ class DataValidation:
 
             report = []
 
-            # -----------------------------
+            # ===================================================
             # Empty Dataset Check
-            # -----------------------------
+            # ===================================================
 
             if train_df.empty:
                 validation_status = False
@@ -57,67 +57,59 @@ class DataValidation:
                 validation_status = False
                 report.append("Test dataset is empty")
 
-            # -----------------------------
-            # Column Check
-            # -----------------------------
+            # ===================================================
+            # Required Column Check
+            # ===================================================
 
             for column in required_columns:
 
                 if column not in train_df.columns:
-
                     validation_status = False
-
-                    report.append(
-                        f"Missing column in train : {column}"
-                    )
+                    report.append(f"Missing column in train data: {column}")
 
                 if column not in test_df.columns:
-
                     validation_status = False
+                    report.append(f"Missing column in test data: {column}")
 
-                    report.append(
-                        f"Missing column in test : {column}"
-                    )
+            # ===================================================
+            # Missing Value Check
+            # ===================================================
 
-            # -----------------------------
-            # Duplicate Check
-            # -----------------------------
+            if train_df.isnull().sum().sum() > 0:
+                validation_status = False
+                report.append("Missing values found in train data")
+
+            if test_df.isnull().sum().sum() > 0:
+                validation_status = False
+                report.append("Missing values found in test data")
+
+            # ===================================================
+            # Duplicate Row Check
+            # ===================================================
 
             if train_df.duplicated().sum() > 0:
-
                 validation_status = False
-
-                report.append(
-                    "Duplicate rows found in train data"
-                )
+                report.append("Duplicate rows found in train data")
 
             if test_df.duplicated().sum() > 0:
-
                 validation_status = False
+                report.append("Duplicate rows found in test data")
 
-                report.append(
-                    "Duplicate rows found in test data"
-                )
-
-            # -----------------------------
+            # ===================================================
             # Target Column Check
-            # -----------------------------
+            # ===================================================
 
             if "Response" not in train_df.columns:
-
                 validation_status = False
-
-                report.append(
-                    "Target column Response missing in train data"
-                )
+                report.append("Target column 'Response' missing in train data")
 
             if "Response" not in test_df.columns:
-
                 validation_status = False
+                report.append("Target column 'Response' missing in test data")
 
-                report.append(
-                    "Target column Response missing in test data"
-                )
+            # ===================================================
+            # Save Validation Report
+            # ===================================================
 
             os.makedirs(
                 os.path.dirname(
@@ -131,26 +123,23 @@ class DataValidation:
                 "w"
             ) as file:
 
-                file.write(
-                    f"Validation Status : {validation_status}\n\n"
-                )
+                file.write(f"Validation Status : {validation_status}\n\n")
 
-                if len(report) == 0:
-
-                    file.write(
-                        "All validation checks passed."
-                    )
+                if validation_status:
+                    file.write("All validation checks passed.\n")
 
                 else:
+                    for message in report:
+                        file.write(message + "\n")
 
-                    for item in report:
-
-                        file.write(item + "\n")
+            logging.info(
+                f"Validation report saved at "
+                f"{self.data_validation_config.validation_report_file_path}"
+            )
 
             return validation_status
 
         except Exception as e:
-
             raise CustomerException(e, sys)
 
     def initiate_data_validation(
@@ -159,12 +148,12 @@ class DataValidation:
 
         try:
 
-            logging.info("Starting Data Validation")
+            logging.info("Starting Data Validation Component")
 
-            status = self.validate_dataset_schema()
+            validation_status = self.validate_dataset_schema()
 
             data_validation_artifact = DataValidationArtifact(
-                validation_status=status,
+                validation_status=validation_status,
                 valid_train_file_path=self.data_ingestion_artifact.trained_file_path,
                 valid_test_file_path=self.data_ingestion_artifact.test_file_path
             )
@@ -176,20 +165,39 @@ class DataValidation:
             return data_validation_artifact
 
         except Exception as e:
-
             raise CustomerException(e, sys)
 
+
+# ==========================================================
+# Run Data Validation
+# ==========================================================
 
 if __name__ == "__main__":
 
     from src.components.data_ingestion import DataIngestion
 
-    ingestion = DataIngestion()
+    try:
 
-    ingestion_artifact = ingestion.initiate_data_ingestion()
+        print("=" * 50)
+        print("Starting Data Validation Pipeline...")
+        print("=" * 50)
 
-    validation = DataValidation(ingestion_artifact)
+        data_ingestion = DataIngestion()
 
-    artifact = validation.initiate_data_validation()
+        ingestion_artifact = data_ingestion.initiate_data_ingestion()
 
-    print(artifact)
+        data_validation = DataValidation(
+            data_ingestion_artifact=ingestion_artifact
+        )
+
+        validation_artifact = (
+            data_validation.initiate_data_validation()
+        )
+
+        print("\n✅ Data Validation Completed Successfully!")
+        print(validation_artifact)
+
+    except Exception as e:
+
+        print("\n❌ Data Validation Failed!")
+        print(e)
