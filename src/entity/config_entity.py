@@ -29,3 +29,17 @@ class DataIngestionConfig:
     )
 
     train_test_split_ratio: float = 0.2
+
+
+
+
+@dataclass
+class DataValidationConfig:
+
+    artifact_dir: str = "artifacts"
+
+    validation_report_file_path: str = os.path.join(
+        artifact_dir,
+        "data_validation",
+        "status.txt"
+    )
