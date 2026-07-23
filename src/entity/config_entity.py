@@ -43,3 +43,27 @@ class DataValidationConfig:
         "data_validation",
         "status.txt"
     )
+
+
+@dataclass
+class DataTransformationConfig:
+
+    artifact_dir = "artifacts"
+
+    transformed_train_file_path = os.path.join(
+        artifact_dir,
+        "data_transformation",
+        "train.npy"
+    )
+
+    transformed_test_file_path = os.path.join(
+        artifact_dir,
+        "data_transformation",
+        "test.npy"
+    )
+
+    transformed_object_file_path = os.path.join(
+        artifact_dir,
+        "data_transformation",
+        "preprocessor.pkl"
+    )
