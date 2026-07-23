@@ -67,3 +67,30 @@ class DataTransformationConfig:
         "data_transformation",
         "preprocessor.pkl"
     )
+
+
+@dataclass
+class ModelTrainerConfig:
+    artifact_dir: str = "artifacts"
+    trained_model_file_path: str = os.path.join(
+        artifact_dir, "model_trainer", "kmeans_model.pkl"
+    )
+    metrics_file_path: str = os.path.join(
+        artifact_dir, "model_trainer", "clustering_metrics.json"
+    )
+    min_clusters: int = 2
+    max_clusters: int = 8
+    random_state: int = 42
+    n_init: int = 25
+
+@dataclass
+class ClusteringMetricArtifact:
+    silhouette_score: float
+    davies_bouldin_score: float
+    calinski_harabasz_score: float
+
+@dataclass
+class ModelTrainerArtifact:
+    trained_model_file_path: str
+    best_k: int
+    metric_artifact: ClusteringMetricArtifact
