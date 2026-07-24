@@ -41,3 +41,12 @@ target_column: Response
 
 drop_columns:
   - Dt_Customer
+
+model_features:
+  - Income
+  - Total_Spending
+  - Total_Purchases
+  - Recency
+  - NumWebVisitsMonth
+  - Total_Promo_Accepted
+  - Children

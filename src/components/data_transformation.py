@@ -1,12 +1,9 @@
-import os
 import sys
 import yaml
 import numpy as np
 import pandas as pd
 
-from sklearn.compose import ColumnTransformer
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import StandardScaler
 
 from src.entity.config_entity import DataTransformationConfig
 from src.entity.artifact_entity import (
@@ -27,10 +24,10 @@ from src.file_utils import (
 class DataTransformation:
 
     def __init__(
-            self,
-            data_ingestion_artifact: DataIngestionArtifact,
-            data_validation_artifact: DataValidationArtifact,
-            data_transformation_config: DataTransformationConfig = DataTransformationConfig()
+        self,
+        data_ingestion_artifact: DataIngestionArtifact,
+        data_validation_artifact: DataValidationArtifact,
+        data_transformation_config: DataTransformationConfig = DataTransformationConfig()
     ):
 
         self.data_ingestion_artifact = data_ingestion_artifact
@@ -67,60 +64,9 @@ class DataTransformation:
 
         try:
 
-            schema = self.read_schema()
+            logging.info("Creating StandardScaler")
 
-            numerical_columns = schema["numerical_columns"]
-            categorical_columns = schema["categorical_columns"]
-
-            logging.info("Creating preprocessing pipelines")
-
-            numerical_pipeline = Pipeline(
-
-                steps=[
-
-                    (
-                        "scaler",
-                        StandardScaler()
-                    )
-
-                ]
-
-            )
-
-            categorical_pipeline = Pipeline(
-
-                steps=[
-
-                    (
-                        "encoder",
-                        OneHotEncoder(
-                            handle_unknown="ignore"
-                        )
-                    )
-
-                ]
-
-            )
-
-            preprocessor = ColumnTransformer(
-
-                transformers=[
-
-                    (
-                        "numerical_pipeline",
-                        numerical_pipeline,
-                        numerical_columns
-                    ),
-
-                    (
-                        "categorical_pipeline",
-                        categorical_pipeline,
-                        categorical_columns
-                    )
-
-                ]
-
-            )
+            preprocessor = StandardScaler()
 
             return preprocessor
 
@@ -155,6 +101,8 @@ class DataTransformation:
                 []
             )
 
+            model_features = schema["model_features"]
+
             train_df = train_df.drop(
                 columns=drop_columns,
                 errors="ignore"
@@ -165,27 +113,27 @@ class DataTransformation:
                 errors="ignore"
             )
 
-            X_train = train_df.drop(
-                columns=[target_column],
-                axis=1
-            )
+            # -----------------------------
+            # Select only model features
+            # -----------------------------
+
+            X_train = train_df[model_features]
 
             y_train = train_df[target_column]
 
-            X_test = test_df.drop(
-                columns=[target_column],
-                axis=1
-            )
+            X_test = test_df[model_features]
 
             y_test = test_df[target_column]
 
-            logging.info("Creating Preprocessor")
+            logging.info("Creating StandardScaler")
 
             preprocessor = self.get_data_transformer_object()
 
-            logging.info("Fitting Preprocessor")
+            logging.info("Scaling Training Data")
 
             X_train = preprocessor.fit_transform(X_train)
+
+            logging.info("Scaling Test Data")
 
             X_test = preprocessor.transform(X_test)
 
@@ -204,7 +152,7 @@ class DataTransformation:
                 np.array(y_test)
 
             ]
-            
+
             logging.info("Saving transformed numpy arrays")
 
             save_numpy_array_data(
@@ -217,29 +165,24 @@ class DataTransformation:
                 test_arr
             )
 
-            logging.info("Saving fitted preprocessor object")
+            logging.info("Saving preprocessor")
 
             save_object(
                 self.data_transformation_config.transformed_object_file_path,
                 preprocessor
             )
 
-            logging.info("Data Transformation completed successfully")
+            logging.info("Data Transformation Completed Successfully")
 
-            data_transformation_artifact = DataTransformationArtifact(
+            return DataTransformationArtifact(
 
-                transformed_train_file_path=
-                self.data_transformation_config.transformed_train_file_path,
+                transformed_train_file_path=self.data_transformation_config.transformed_train_file_path,
 
-                transformed_test_file_path=
-                self.data_transformation_config.transformed_test_file_path,
+                transformed_test_file_path=self.data_transformation_config.transformed_test_file_path,
 
-                transformed_object_file_path=
-                self.data_transformation_config.transformed_object_file_path
+                transformed_object_file_path=self.data_transformation_config.transformed_object_file_path
 
             )
-
-            return data_transformation_artifact
 
         except Exception as e:
 
