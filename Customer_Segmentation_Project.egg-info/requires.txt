@@ -1,38 +1,18 @@
-# Data Processing
 pandas
 numpy
-
-# Visualization
 matplotlib
 seaborn
-
-# Machine Learning
 scikit-learn
 xgboost
 catboost
 statsmodels
 joblib
-
-# API
 fastapi
 uvicorn[standard]
-
-# Frontend
 streamlit
 requests
-
-# Database
 pymongo
-
-# Configuration
 PyYAML
 python-dotenv
-
-# Excel
 openpyxl
-
-# SSL Certificates
 certifi
-
-# Editable Install
--e .
