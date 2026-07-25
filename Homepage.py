@@ -1,8 +1,9 @@
 import streamlit as st
-import streamlit.components.v1 as components
 import requests
 import pandas as pd
 import plotly.graph_objects as go
+
+from common_theme import init_theme, inject_css, theme_toggle, CURRENCY
 
 # ---------------------------------------------------------
 # Page Configuration
@@ -15,284 +16,9 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ---------------------------------------------------------
-# Theme State
-# ---------------------------------------------------------
-
-if "theme" not in st.session_state:
-    st.session_state.theme = "dark"
-
-THEMES = {
-    "dark": {
-        "bg": "#0E1117",
-        "card_bg": "#1A1D26",
-        "card_border": "#2B2F3A",
-        "sidebar_bg": "#161A23",
-        "text": "#FAFAFA",
-        "subtext": "#9CA3AF",
-        "input_bg": "#1A1D26",
-        "input_text": "#FAFAFA",
-        "input_border": "#2B2F3A",
-        "accent_1": "#2563EB",
-        "accent_2": "#1D4ED8",
-        "accent_hover_1": "#1D4ED8",
-        "accent_hover_2": "#1E40AF",
-        "plotly_template": "plotly_dark",
-    },
-    "light": {
-        "bg": "#F5F7FA",
-        "card_bg": "#FFFFFF",
-        "card_border": "#E2E8F0",
-        "sidebar_bg": "#FFFFFF",
-        "text": "#111827",
-        "subtext": "#4B5563",
-        "input_bg": "#FFFFFF",
-        "input_text": "#111827",
-        "input_border": "#CBD5E1",
-        "accent_1": "#2563EB",
-        "accent_2": "#1D4ED8",
-        "accent_hover_1": "#1D4ED8",
-        "accent_hover_2": "#1E40AF",
-        "plotly_template": "plotly_white",
-    },
-}
-
-theme = THEMES[st.session_state.theme]
-
-# Currency symbol used everywhere in the dashboard
-CURRENCY = "₹"
-
-# ---------------------------------------------------------
-# Custom CSS (driven by theme dict, not hardcoded)
-# ---------------------------------------------------------
-
-st.markdown(f"""
-<style>
-
-/* Hide Streamlit Branding */
-#MainMenu {{visibility:hidden;}}
-footer {{visibility:hidden;}}
-header {{visibility:hidden;}}
-
-/* Streamlit's own CSS variables drive native widget colors
-   (number input, select box, slider, etc). Overriding these
-   is what actually fixes light-mode visibility. */
-:root, .stApp {{
-    --primary-color: {theme['accent_1']};
-    --background-color: {theme['bg']};
-    --secondary-background-color: {theme['card_bg']};
-    --text-color: {theme['text']};
-}}
-
-.stApp{{
-    background:{theme['bg']};
-    color:{theme['text']};
-}}
-
-/* Main Container */
-.block-container{{
-    padding-top:2rem;
-    padding-bottom:2rem;
-    max-width:1300px;
-}}
-
-/* Hero Card */
-.hero{{
-    background:linear-gradient(135deg,{theme['accent_1']},{theme['accent_2']});
-    padding:35px;
-    border-radius:18px;
-    color:white;
-    box-shadow:0px 8px 30px rgba(0,0,0,.25);
-    margin-bottom:25px;
-}}
-
-.hero h1{{
-    font-size:46px;
-    margin-bottom:5px;
-}}
-
-.hero p{{
-    font-size:18px;
-    opacity:.9;
-}}
-
-/* Section Title */
-.section-title{{
-    font-size:28px;
-    font-weight:700;
-    margin-top:15px;
-    margin-bottom:20px;
-    color:{theme['text']};
-}}
-
-/* Card */
-.metric-card{{
-    background:{theme['card_bg']};
-    padding:20px;
-    border-radius:15px;
-    border:1px solid {theme['card_border']};
-    text-align:center;
-    color:{theme['text']};
-}}
-
-/* General text / headings / labels visibility across both themes */
-h1, h2, h3, h4, h5, h6, p, span, label, .stMarkdown, .stCaption {{
-    color:{theme['text']};
-}}
-
-div[data-testid="stMetricValue"], div[data-testid="stMetricLabel"] {{
-    color:{theme['text']};
-}}
-
-/* ---- Native input widgets (Number Input, Selectbox, Slider) ---- */
-
-.stNumberInput input,
-.stTextInput input {{
-    background-color:{theme['input_bg']} !important;
-    color:{theme['input_text']} !important;
-    border:1px solid {theme['input_border']} !important;
-}}
-
-.stNumberInput button {{
-    background-color:{theme['input_bg']} !important;
-    color:{theme['input_text']} !important;
-    border:1px solid {theme['input_border']} !important;
-}}
-
-div[data-baseweb="select"] > div {{
-    background-color:{theme['input_bg']} !important;
-    color:{theme['input_text']} !important;
-    border:1px solid {theme['input_border']} !important;
-}}
-
-/* Dropdown menu portal renders outside .stApp, needs its own rule */
-div[data-baseweb="popover"] ul, div[data-baseweb="menu"] {{
-    background-color:{theme['input_bg']} !important;
-    color:{theme['input_text']} !important;
-}}
-
-div[data-baseweb="popover"] li:hover {{
-    background-color:{theme['card_border']} !important;
-}}
-
-.stSlider label, .stNumberInput label, .stSelectbox label {{
-    color:{theme['text']} !important;
-}}
-
-/* Slider track / thumb numbers */
-.stSlider [data-testid="stTickBarMin"],
-.stSlider [data-testid="stTickBarMax"],
-.stSlider div[role="slider"] {{
-    color:{theme['text']} !important;
-}}
-
-/* Info / success boxes */
-div[data-testid="stAlert"] {{
-    background-color:{theme['card_bg']} !important;
-    color:{theme['text']} !important;
-}}
-
-/* Button */
-div.stButton>button{{
-    width:100%;
-    height:60px;
-    font-size:20px;
-    font-weight:bold;
-    border-radius:15px;
-    background:linear-gradient(90deg,{theme['accent_1']},{theme['accent_2']});
-    color:white;
-    border:none;
-}}
-
-div.stButton>button:hover{{
-    background:linear-gradient(90deg,{theme['accent_hover_1']},{theme['accent_hover_2']});
-    color:white;
-}}
-
-/* Sidebar */
-section[data-testid="stSidebar"]{{
-    background:{theme['sidebar_bg']};
-}}
-
-section[data-testid="stSidebar"] * {{
-    color:{theme['text']} !important;
-}}
-
-/* Sidebar multipage navigation: force Title Case + readable color */
-section[data-testid="stSidebarNav"] a span,
-section[data-testid="stSidebarNav"] a p {{
-    text-transform: capitalize !important;
-    color:{theme['text']} !important;
-}}
-
-section[data-testid="stSidebarNav"] a:hover span,
-section[data-testid="stSidebarNav"] a:hover p {{
-    color:{theme['accent_1']} !important;
-}}
-
-/* ---- Floating Sun/Moon theme toggle, fixed top-right ---- */
-.st-key-theme_toggle_container {{
-    position: fixed;
-    top: 14px;
-    right: 30px;
-    z-index: 9999;
-    width: 50px !important;
-}}
-
-.st-key-theme_toggle_container div.stButton>button {{
-    width:46px;
-    height:46px;
-    min-height:46px;
-    border-radius:50%;
-    font-size:20px;
-    padding:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:{theme['card_bg']};
-    border:1px solid {theme['card_border']};
-    color:{theme['text']};
-    box-shadow:0px 4px 14px rgba(0,0,0,.15);
-}}
-
-.st-key-theme_toggle_container div.stButton>button:hover {{
-    background:{theme['card_border']};
-}}
-
-</style>
-""", unsafe_allow_html=True)
-
-# Best-effort relabel of the first sidebar nav entry to "Homepage".
-# (Multipage nav labels normally come from filenames; renaming the
-# entry file itself to Homepage.py is the cleaner long-term fix —
-# this JS patch just covers it live in the browser.)
-components.html("""
-<script>
-function relabelNav(){
-    const doc = window.parent.document;
-    const navLinks = doc.querySelectorAll('[data-testid="stSidebarNav"] a');
-    navLinks.forEach(link => {
-        const label = link.querySelector('span') || link.querySelector('p');
-        if (label && label.textContent.trim().toLowerCase() === 'streamlit ui') {
-            label.textContent = 'Homepage';
-        }
-    });
-}
-relabelNav();
-const observer = new MutationObserver(relabelNav);
-observer.observe(window.parent.document.body, {childList: true, subtree: true});
-</script>
-""", height=0, width=0)
-
-# ---------------------------------------------------------
-# Floating theme toggle (sun / moon, top-right corner)
-# ---------------------------------------------------------
-
-with st.container(key="theme_toggle_container"):
-    icon = "☀️" if st.session_state.theme == "dark" else "🌙"
-    if st.button(icon, key="theme_toggle_btn", help="Toggle light / dark mode"):
-        st.session_state.theme = "light" if st.session_state.theme == "dark" else "dark"
-        st.rerun()
+theme = init_theme()
+inject_css(theme)
+theme_toggle()
 
 # ---------------------------------------------------------
 # Sidebar
@@ -513,11 +239,6 @@ def get_customer_profile(segment):
     )
 
 
-# ==========================================================
-# Session state to persist last prediction across reruns
-# (theme toggle / other widget changes no longer wipe it out)
-# ==========================================================
-
 if "last_prediction" not in st.session_state:
     st.session_state.last_prediction = None
 
@@ -584,7 +305,6 @@ if predict_btn:
 
         st.stop()
 
-# Pull whatever the latest prediction is (persists across reruns)
 prediction = st.session_state.last_prediction
 
 if prediction:
@@ -593,10 +313,6 @@ if prediction:
     segment = prediction["segment"]
     description = prediction["description"]
     profile = prediction["profile"]
-
-    # ======================================================
-    # Prediction Dashboard
-    # ======================================================
 
     st.markdown("---")
 
@@ -610,10 +326,6 @@ if prediction:
     )
 
     left, right = st.columns([2.2, 1], gap="large")
-
-    # ------------------------------------------------------
-    # LEFT PANEL
-    # ------------------------------------------------------
 
     with left:
 
@@ -640,10 +352,6 @@ if prediction:
 
         for item in profile["strategies"]:
             st.markdown(f"✅ {item}")
-
-    # ------------------------------------------------------
-    # RIGHT PANEL
-    # ------------------------------------------------------
 
     with right:
 
@@ -740,8 +448,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# Use 3 columns consistently so the "Family" card sits alongside
-# the other two instead of a separate (buggy) row below.
 snapshot1, snapshot2, snapshot3 = st.columns(3)
 
 with snapshot1:
