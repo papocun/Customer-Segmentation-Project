@@ -12,4 +12,5 @@ openpyxl
 certifi
 pymongo
 PyYAML
+fastapi
 #-e .
