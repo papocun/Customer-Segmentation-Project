@@ -198,7 +198,12 @@ predict_btn = st.button("🚀 Predict Customer Segment")
 # Prediction Helper
 # ==========================================================
 
-API_URL = "http://127.0.0.1:8000/predict"
+import os
+
+API_URL = os.getenv(
+    "API_URL",
+    "http://127.0.0.1:8000/predict"
+)
 
 
 def get_customer_profile(segment):

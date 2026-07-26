@@ -35,4 +35,3 @@ openpyxl
 certifi
 
 # Editable Install
--e .
