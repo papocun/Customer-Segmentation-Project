@@ -71,6 +71,8 @@ async def home():
     }
 
 
+import traceback
+
 # ==========================================================
 # Prediction Route
 # ==========================================================
@@ -83,17 +85,11 @@ async def predict(customer: CustomerInput):
         customer_data = CustomerData(
 
             Income=customer.Income,
-
             Total_Spending=customer.Total_Spending,
-
             Total_Purchases=customer.Total_Purchases,
-
             Recency=customer.Recency,
-
             NumWebVisitsMonth=customer.NumWebVisitsMonth,
-
             Total_Promo_Accepted=customer.Total_Promo_Accepted,
-
             Children=customer.Children
 
         )
@@ -115,18 +111,19 @@ async def predict(customer: CustomerInput):
         )
 
         return {
-
             "status": "success",
-
             "cluster": cluster,
-
             "segment": result["segment"],
-
             "description": result["description"]
-
         }
 
     except Exception as e:
+
+        print("\n" + "=" * 70)
+        print("❌ ERROR INSIDE /predict")
+        print("=" * 70)
+        traceback.print_exc()
+        print("=" * 70 + "\n")
 
         raise HTTPException(
             status_code=500,

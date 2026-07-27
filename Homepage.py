@@ -266,6 +266,9 @@ if predict_btn:
     try:
 
         with st.spinner("🔍 Analyzing customer..."):
+            st.write("Button Clicked ✅")
+            st.write(f"API URL: {API_URL}")
+            st.write("Payload:", payload)
 
             response = requests.post(
                 API_URL,
@@ -291,7 +294,7 @@ if predict_btn:
         }
 
     except requests.exceptions.ConnectionError:
-
+        st.error("Exception while calling API")
         st.error(
             "❌ Unable to connect to FastAPI.\n\nRun:\n\nuvicorn app:app --reload"
         )
