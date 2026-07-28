@@ -107,6 +107,8 @@ In our analysis, $K = 2$ produced a distinct, sharp elbow, separating customers 
 
 ## 📊 Model Results & Visualizations
 
+All visual charts and screenshots are organized in the [`images/`](images/) directory.
+
 ### 1. Elbow Method Curve
 ![Elbow Method](images/elbow_method.png)
 *Shows the SSE error drop across different cluster counts, highlighting the optimal elbow point at $K = 2$.*
@@ -169,19 +171,27 @@ Streamlit Frontend (Port 8501)       FastAPI Backend (Port 8000)
 
 ```text
 Customer-Segmentation-Project/
-├── app.py                   # FastAPI backend application & API routes
-├── Homepage.py              # Main Streamlit web dashboard entry point
-├── common_theme.py          # Shared UI theme, custom styling, and layout components
+├── app.py                   # FastAPI backend application & API endpoints
+├── Homepage.py              # Main Streamlit web application entry point
+├── common_theme.py          # Shared UI theme, styling & layout helper functions
 ├── nginx.conf               # Production Nginx reverse proxy configuration
-├── docker-compose.yml       # Multi-container orchestration (Nginx, Backend, Frontend)
-├── Dockerfile               # Container build blueprint
+├── docker-compose.yml       # Docker Compose multi-container setup (Nginx, Backend, Frontend)
+├── Dockerfile               # Blueprint for building container images
 ├── requirements.txt         # Project Python dependencies
-├── images/                  # Screenshots and visualization assets
-├── pages/                   # Additional Streamlit multipage views
-└── src/
-    ├── pipeline/            # Training and prediction execution pipelines
-    ├── components/          # Data ingestion, transformation, and model trainer
-    └── utils/               # Helper utilities and MongoDB connectors
+├── images/                  # Screenshots and visualization assets directory
+│   ├── README.md            # Image upload guide and required assets checklist
+│   └── elbow_method.png     # Optimal K cluster elbow evaluation graph
+├── scripts/                 # Independent utility & analysis scripts
+│   ├── cluster_analysis.py  # Elbow & silhouette metric evaluation script
+│   ├── cluster_profiling.py # Cluster statistics generator
+│   ├── demo.py              # ML pipeline training execution script
+│   └── predict_demo.py      # Standalone prediction test script
+├── pages/                   # Additional Streamlit multipage application views
+├── src/                     # Core ML source code
+│   ├── components/          # Data ingestion, transformation & model training modules
+│   └── pipeline/            # End-to-end training and prediction pipelines
+├── data/                    # Raw and processed datasets
+└── artifacts/               # Trained models, scalers & evaluation metrics
 ```
 
 ---
