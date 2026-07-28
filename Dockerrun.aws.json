@@ -1,0 +1,32 @@
+{
+  "AWSEBDockerrunVersion": "2",
+  "containerDefinitions": [
+    {
+      "name": "backend",
+      "image": "customer_segmentation_backend",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 8000,
+          "containerPort": 8000
+        }
+      ]
+    },
+    {
+      "name": "frontend",
+      "image": "customer_segmentation_frontend",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 8501,
+          "containerPort": 8501
+        }
+      ],
+      "links": [
+        "backend"
+      ]
+    }
+  ]
+}
