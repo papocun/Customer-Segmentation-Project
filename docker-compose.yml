@@ -4,6 +4,9 @@ services:
     build: .
     container_name: customer_segmentation_api
 
+    volumes:
+      - ./artifacts:/app/artifacts
+
     command: >
       uvicorn app:app
       --host 0.0.0.0
@@ -21,6 +24,9 @@ services:
 
     environment:
       API_URL: http://backend:8000/predict
+
+    volumes:
+      - ./artifacts:/app/artifacts
 
     command: >
       streamlit run Homepage.py
