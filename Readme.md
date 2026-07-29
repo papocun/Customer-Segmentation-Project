@@ -115,25 +115,6 @@ The engine uses **KMeans Clustering** ($K=2$) to segment customers into distinct
 | **Containerization** | Docker, Docker Compose |
 | **Reverse Proxy** | Nginx |
 | **Cloud Host** | AWS EC2 (Ubuntu Linux) |
-
----
-
-## 🚀 Quick Start (Local Setup)
-
-1. **Clone the Repository**
-   ```bash
-   git clone https://github.com/papocun/Customer-Segmentation-Project.git
-   cd Customer-Segmentation-Project
-   ```
-
-2. **Run with Docker Compose**
-   ```bash
-   docker compose up --build -d
-   ```
-
-3. **Access Service**
-   * **Streamlit UI**: `http://localhost:8501`
-
 ---
 
 ## 🔮 Future Scope & Planned Features
