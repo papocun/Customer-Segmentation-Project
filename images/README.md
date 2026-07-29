@@ -1,22 +1,20 @@
 # 📸 Project Image Assets Directory
 
-Place your project screenshots and ML visualization graphs inside this directory (`images/`).
-
-These images are automatically rendered in the main [README.md](../Readme.md).
+This directory contains all UI screenshots and Machine Learning evaluation plots rendered in the main [README.md](../Readme.md).
 
 ---
 
-## 🖼️ Required Image Files Checklist
+## 🖼️ Included Image Assets
 
-| Filename | Where to get it / What it should show |
+| Filename | Description |
 | :--- | :--- |
-| **`elbow_method.png`** | The Elbow Method plot showing inertia vs. cluster count $K$ (e.g. from `artifacts/model_trainer/elbow_curve.png`). |
-| **`clusters.png`** | Cluster scatter plot (Income vs. Total Spending grouped by cluster). |
-| **`pca.png`** | 2D PCA cluster projection plot. |
-| **`homepage.png`** | Screenshot of your Streamlit web dashboard running at `http://localhost/` or `http://<EC2_IP>/`. |
-| **`prediction.png`** | Screenshot of the prediction result card after clicking "Predict Customer Segment". |
-
----
-
-> [!TIP]
-> Make sure the filenames match the exact names in the table above (lowercase with `.png` extension) so they display cleanly on GitHub!
+| **`light_mode_input.png`** | Light mode customer information input form |
+| **`dark_mode_input.png`** | Dark mode customer information input form |
+| **`light_mode_prediction.png`** | Light mode prediction dashboard & recommended strategy |
+| **`dark_mode_prediction.png`** | Dark mode prediction dashboard & recommended strategy |
+| **`light_mode_snapshot.png`** | Light mode customer snapshot summary |
+| **`dark_mode_snapshot.png`** | Dark mode customer snapshot summary |
+| **`elbow_method.png`** | Elbow Method curve (Inertia vs $K$) |
+| **`silhouette_method.png`** | Silhouette Score curve |
+| **`cluster_distribution.png`** | Customer cluster scatter plot (Income vs. Spending) |
+| **`pca_clusters.png`** | 2D PCA cluster projection with centroids |
