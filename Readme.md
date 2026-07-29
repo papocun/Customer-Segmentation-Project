@@ -1,7 +1,6 @@
 # 🛍️ Customer Segmentation ML Engine & Dashboard
 
-> 🌐 **Live EC2 Deployment**: [http://<YOUR_EC2_PUBLIC_IP>](http://<YOUR_EC2_PUBLIC_IP>)  
-> ⚡ **API Documentation**: [http://<YOUR_EC2_PUBLIC_IP>/docs](http://<YOUR_EC2_PUBLIC_IP>/docs)
+> 🌐 **Live EC2 Deployment**: [http://16.171.71.103/](http://16.171.71.103/)
 
 An end-to-end Machine Learning web application that segments retail customers based on financial history, spending behavior, and promotional engagement using **FastAPI**, **Streamlit**, **KMeans Clustering**, and **MongoDB**. Fully containerized with **Docker** and reverse-proxied via **Nginx** on **AWS EC2**.
 
@@ -132,9 +131,8 @@ The engine uses **KMeans Clustering** ($K=2$) to segment customers into distinct
    docker compose up --build -d
    ```
 
-3. **Access Services**
+3. **Access Service**
    * **Streamlit UI**: `http://localhost:8501`
-   * **FastAPI Docs**: `http://localhost:8000/docs`
 
 ---
 
