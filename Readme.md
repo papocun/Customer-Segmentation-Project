@@ -6,6 +6,31 @@ An end-to-end, enterprise-grade **Machine Learning MLOps web application** desig
 
 ---
 
+## ⭐ Project Summary (STAR Method)
+
+### 📌 Situation
+Retail companies often struggle with one-size-fits-all marketing campaigns. Treating all customers identically leads to low campaign conversion rates, inefficient ad spend, and missed revenue opportunities. Marketing teams need an automated way to group customers by spending power, shopping habits, and campaign responsiveness.
+
+### 🎯 Task
+Develop, deploy, and maintain an end-to-end Machine Learning web application and MLOps system that automatically categorizes retail customers into distinct behavioral segments (personas) and provides marketing teams with real-time predictions, actionable recommendations, and a cloud-hosted interactive dashboard.
+
+### 🛠️ Action
+* **Data Preprocessing & Normalization**: Processed raw features (`Income`, `Total_Spending`, `Total_Purchases`, `Recency`, `Web Visits`, `Promos Accepted`, `Children`) using **Pandas** and **NumPy**. Standardized feature ranges using **Scikit-Learn** (`StandardScaler`).
+* **Cluster Modeling**: Evaluated optimal cluster numbers using **Inertia (Elbow Method)** and **Silhouette Coefficient Analysis** ($K=2$). Fitted a **KMeans Clustering** model to separate customers into *High-Value* and *Budget* personas.
+* **Modular MLOps Architecture**: Structured python code into reusable components (`data_ingestion`, `data_validation`, `data_transformation`, `model_trainer`) and orchestrator pipelines (`train_pipeline.py`, `predict_pipeline.py`).
+* **REST API Backend**: Built a high-performance **FastAPI** server with **Pydantic** request validation to handle real-time inference via a `/predict` endpoint.
+* **Interactive Frontend**: Created a **Streamlit** dashboard featuring a custom dynamic light/dark CSS engine (`common_theme.py`), persona summary cards, and report downloads.
+* **Database & Storage**: Connected **MongoDB Atlas** for persistence of customer records, prediction logs, and historical datasets.
+* **Containerization & Cloud Deployment**: Encapsulated backend, frontend, and **Nginx Reverse Proxy** using **Docker & Docker Compose**, deploying the containerized stack to an **AWS EC2** instance.
+
+### 📊 Result
+* 🌐 **Live Production App**: Deployed live on AWS EC2 at [http://16.171.71.103/](http://16.171.71.103/).
+* ⚡ **Sub-Second Predictions**: Delivers real-time customer segment classifications in < 1 second.
+* 🎯 **Actionable Insights**: Automatically provides tailored marketing strategies for each segment (*VIP Loyalty Perks vs Value Discounts*).
+* 🔄 **Reproducible & Scalable**: Fully containerized setup allows seamless continuous deployment and local reproduction with a single `docker-compose up` command.
+
+---
+
 ## ⚙️ MLOps System Architecture & Workflow
 
 The architecture below illustrates the complete **End-to-End MLOps Lifecycle**, divided into the **Development Environment** (versioning, training code, inference logic, monitoring scripts, CI/CD) and the **Production Environment** (live data storage, automated training pipeline, model storage, REST API inference, UI dashboard, and performance monitoring).
