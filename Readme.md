@@ -252,71 +252,8 @@ Customer Segmentation Project/
 | **Reverse Proxy** | Nginx (Port 80) | Port routing, load balancing, and header proxying to inner services |
 | **Cloud Hosting** | AWS EC2 (Ubuntu Linux) | Live server deployment hosted on AWS cloud infrastructure |
 
----
 
-## 🚀 Installation & Local Execution Guide
 
-### Option 1: Docker Compose (Recommended)
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/papocun/Customer-Segmentation-Project.git
-   cd "Customer Segmentation Project"
-   ```
-
-2. **Configure Environment Variables**:
-   Create a `.env` file in the root directory:
-   ```env
-   MONGO_DB_URL="your_mongodb_atlas_connection_string"
-   API_URL="http://backend:8000/predict"
-   ```
-
-3. **Build & Spin Up Container Services**:
-   ```bash
-   docker-compose up --build -d
-   ```
-
-4. **Access the Application**:
-   * **Nginx Entrypoint**: [http://localhost/](http://localhost/)
-   * **Streamlit UI**: [http://localhost:8501/](http://localhost:8501/)
-   * **FastAPI Docs**: [http://localhost:8000/docs](http://localhost:8000/docs)
-
----
-
-### Option 2: Local Python Environment Setup
-
-1. **Create & Activate Virtual Environment**:
-   ```bash
-   python -m venv venv
-   # On Windows:
-   .\venv\Scripts\activate
-   # On macOS/Linux:
-   source venv/bin/activate
-   ```
-
-2. **Install Dependencies & Package**:
-   ```bash
-   pip install --upgrade pip
-   pip install -r requirements.txt
-   pip install -e .
-   ```
-
-3. **Run Training Pipeline**:
-   ```bash
-   python src/pipeline/train_pipeline.py
-   ```
-
-4. **Start Backend REST API**:
-   ```bash
-   uvicorn app:app --host 0.0.0.0 --port 8000 --reload
-   ```
-
-5. **Start Frontend Dashboard**:
-   ```bash
-   streamlit run Homepage.py
-   ```
-
----
 
 ## 🔮 MLOps Roadmap & Future Scope
 
